@@ -39,11 +39,13 @@ negotiation and establishment of BEET mode security associations.
 * Introduction
 
 The Bound End-to-End Tunnel (BEET) mode, as specified in Appendix B
-of [[RFC7402]], offers an optimized approach for deploying IP
-Security (IPsec), [RFC4301], using Encapsulating Security Payload
-(ESP) [RFC4303] for end-to-end use cases. It combines the advantages of Tunnel and
-Transport modes specified in [[RFC7296]], while minimizing their
-overhead for end-to-end use cases.
+of [[RFC7402]] and subsequently updated in
+[[I-D.moskowitz-ipsecme-rfc7402-beet-update]], offers an optimized
+approach for deploying IP Security (IPsec), [RFC4301], using
+Encapsulating Security Payload (ESP) [RFC4303] for end-to-end use
+cases. It combines the advantages of Tunnel and Transport modes
+specified in [[RFC7296]], while minimizing their overhead for
+end-to-end use cases.
 
 The [[RFC7402]]does not specify necessary code points to negotiate
 a ESP BEET mode SA using the Internet Key Exchange Protocol
@@ -253,6 +255,8 @@ contributions to the implementation of BEET mode many years ago.
 ** RFC7401
 ** RFC9333
 ** I-D.nikander-esp-beet-mode
+** I-D.moskowitz-ipsecme-rfc7402-beet-update
+
 ** STATUSNOTIFY
 :PROPERTIES:
 :REF_TARGET: https://www.iana.org/assignments/ikev2-parameters/ikev2-parameters.xhtml#ikev2-parameters-16
