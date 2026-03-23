@@ -5,11 +5,11 @@
 IPSECME Working Group                                          A. Antony
 Internet-Draft                                               S. Klassert
 Intended status: Standards Track                                 secunet
-Expires: 20 March 2026                                 16 September 2025
+Expires: 24 September 2026                                 23 March 2026
 
 
      IKEv2 negotiation for Bound End-to-End Tunnel (BEET) mode ESP
-                 draft-ietf-ipsecme-ikev2-beet-mode-02
+                 draft-ietf-ipsecme-ikev2-beet-mode-03
 
 Abstract
 
@@ -37,11 +37,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 March 2026.
+   This Internet-Draft will expire on 24 September 2026.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Antony & Klassert         Expires 20 March 2026                 [Page 1]
+Antony & Klassert       Expires 24 September 2026               [Page 1]
 
-Internet-Draft           IKv2 for BEET mode ESP           September 2025
+Internet-Draft           IKv2 for BEET mode ESP               March 2026
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -97,21 +97,21 @@ Table of Contents
    specified in [RFC7296], while minimizing their overhead for end-to-
    end use cases.
 
-   The [RFC7402]does not specify necessary code points to negotiate a
-   ESP BEET mode SA using the Internet Key Exchange Protocol Version 2
-   (IKEv2) [RFC7296].  This document fills this gap by introducing a new
-   Notify Message Status Type, USE_BEET_MODE, to facilitate the
-   negotiation and establishment of BEET mode security associations in
-   IKEv2.
+   This document specifies the necessary code points to negotiate
+   [RFC7402] an ESP BEET mode SA using the Internet Key Exchange
+   Protocol Version 2 (IKEv2) [RFC7296].  This document fills this gap
+   by introducing a new Notify Message Status Type, USE_BEET_MODE, to
+   facilitate the negotiation and establishment of BEET mode security
+   associations in IKEv2.
 
 
 
 
 
 
-Antony & Klassert         Expires 20 March 2026                 [Page 2]
+Antony & Klassert       Expires 24 September 2026               [Page 2]
 
-Internet-Draft           IKv2 for BEET mode ESP           September 2025
+Internet-Draft           IKv2 for BEET mode ESP               March 2026
 
 
 1.1.  Background
@@ -165,9 +165,9 @@ Internet-Draft           IKv2 for BEET mode ESP           September 2025
 
 
 
-Antony & Klassert         Expires 20 March 2026                 [Page 3]
+Antony & Klassert       Expires 24 September 2026               [Page 3]
 
-Internet-Draft           IKv2 for BEET mode ESP           September 2025
+Internet-Draft           IKv2 for BEET mode ESP               March 2026
 
 
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -221,9 +221,9 @@ Internet-Draft           IKv2 for BEET mode ESP           September 2025
 
 
 
-Antony & Klassert         Expires 20 March 2026                 [Page 4]
+Antony & Klassert       Expires 24 September 2026               [Page 4]
 
-Internet-Draft           IKv2 for BEET mode ESP           September 2025
+Internet-Draft           IKv2 for BEET mode ESP               March 2026
 
 
    The description of implementations in this section is intended to
@@ -277,9 +277,9 @@ Internet-Draft           IKv2 for BEET mode ESP           September 2025
 
 
 
-Antony & Klassert         Expires 20 March 2026                 [Page 5]
+Antony & Klassert       Expires 24 September 2026               [Page 5]
 
-Internet-Draft           IKv2 for BEET mode ESP           September 2025
+Internet-Draft           IKv2 for BEET mode ESP               March 2026
 
 
    Description:  Implements IKE negotiation and ESP support for BEET
@@ -333,9 +333,9 @@ Internet-Draft           IKv2 for BEET mode ESP           September 2025
 
 
 
-Antony & Klassert         Expires 20 March 2026                 [Page 6]
+Antony & Klassert       Expires 24 September 2026               [Page 6]
 
-Internet-Draft           IKv2 for BEET mode ESP           September 2025
+Internet-Draft           IKv2 for BEET mode ESP               March 2026
 
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
@@ -360,9 +360,9 @@ Internet-Draft           IKv2 for BEET mode ESP           September 2025
               Moskowitz, R., Laari, P., Melen, J., Antony, A., and A.
               Gurtov, "A Bound End-to-End Tunnel (BEET) mode for ESP",
               Work in Progress, Internet-Draft, draft-moskowitz-ipsecme-
-              rfc7402-beet-update-01, 6 August 2025,
+              rfc7402-beet-update-02, 9 October 2025,
               <https://datatracker.ietf.org/doc/html/draft-moskowitz-
-              ipsecme-rfc7402-beet-update-01>.
+              ipsecme-rfc7402-beet-update-02>.
 
    [I-D.nikander-esp-beet-mode]
               Nikander, P. and J. Melen, "A Bound End-to-End Tunnel
@@ -389,9 +389,9 @@ Internet-Draft           IKv2 for BEET mode ESP           September 2025
 
 
 
-Antony & Klassert         Expires 20 March 2026                 [Page 7]
+Antony & Klassert       Expires 24 September 2026               [Page 7]
 
-Internet-Draft           IKv2 for BEET mode ESP           September 2025
+Internet-Draft           IKv2 for BEET mode ESP               March 2026
 
 
    [RFC7942]  Sheffer, Y. and A. Farrel, "Improving Awareness of Running
@@ -445,4 +445,4 @@ Authors' Addresses
 
 
 
-Antony & Klassert         Expires 20 March 2026                 [Page 8]
+Antony & Klassert       Expires 24 September 2026               [Page 8]
