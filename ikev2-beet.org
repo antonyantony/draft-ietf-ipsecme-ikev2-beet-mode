@@ -6,7 +6,7 @@
 
 #+RFC_CATEGORY: std
 #+RFC_NAME: draft-ietf-ipsecme-ikev2-beet-mode
-#+RFC_VERSION: 02
+#+RFC_VERSION: 03
 #+RFC_IPR: trust200902
 #+RFC_STREAM: IETF
 #+RFC_TOC_DEPTH: 4
@@ -47,8 +47,8 @@ cases. It combines the advantages of Tunnel and Transport modes
 specified in [[RFC7296]], while minimizing their overhead for
 end-to-end use cases.
 
-The [[RFC7402]]does not specify necessary code points to negotiate
-a ESP BEET mode SA using the Internet Key Exchange Protocol
+This document specifies the  necessary code points to negotiate [[RFC7402]]
+an ESP BEET mode SA using the Internet Key Exchange Protocol
 Version 2 (IKEv2) [RFC7296]. This document fills this gap by introducing a new
 Notify Message Status Type, USE_BEET_MODE, to facilitate the
 negotiation and establishment of BEET mode security associations in
