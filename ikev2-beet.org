@@ -39,7 +39,7 @@ negotiation and establishment of BEET mode security associations.
 * Introduction
 
 The Bound End-to-End Tunnel (BEET) mode is specified in
-[[I-D.moskowitz-ipsecme-rfc7402-beet-update]]. BEET mode was
+[[I-D.ipsecme-rfc7402-beet-update]]. BEET mode was
 originally proposed in [[I-D.nikander-esp-beet-mode]] and first
 standardized in Appendix B of [[RFC7402]]. It offers an optimized
 approach for deploying IP Security (IPsec) [RFC4301] using
@@ -245,7 +245,7 @@ contributions to the implementation of BEET mode many years ago.
 
 ** RFC2119
 ** RFC7296
-** I-D.moskowitz-ipsecme-rfc7402-beet-update
+** I-D.ipsecme-rfc7402-beet-update
 
 * Informative References
 
