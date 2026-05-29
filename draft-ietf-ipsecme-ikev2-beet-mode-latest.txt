@@ -9,7 +9,7 @@ Expires: 30 November 2026                                    29 May 2026
 
 
      IKEv2 negotiation for Bound End-to-End Tunnel (BEET) mode ESP
-                 draft-ietf-ipsecme-ikev2-beet-mode-04
+                 draft-ietf-ipsecme-ikev2-beet-mode-05
 
 Abstract
 
