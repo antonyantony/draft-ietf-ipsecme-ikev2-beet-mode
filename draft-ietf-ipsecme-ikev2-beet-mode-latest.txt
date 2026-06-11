@@ -5,7 +5,7 @@
 IPSECME Working Group                                          A. Antony
 Internet-Draft                                               S. Klassert
 Intended status: Standards Track                                 secunet
-Expires: 30 November 2026                                    29 May 2026
+Expires: 13 December 2026                                   11 June 2026
 
 
      IKEv2 negotiation for Bound End-to-End Tunnel (BEET) mode ESP
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 November 2026.
+   This Internet-Draft will expire on 13 December 2026.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Antony & Klassert       Expires 30 November 2026                [Page 1]
+Antony & Klassert       Expires 13 December 2026                [Page 1]
 
-Internet-Draft           IKv2 for BEET mode ESP                 May 2026
+Internet-Draft           IKEv2 for BEET mode ESP               June 2026
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -73,18 +73,18 @@ Table of Contents
      1.1.  Background  . . . . . . . . . . . . . . . . . . . . . . .   3
      1.2.  Requirements Language . . . . . . . . . . . . . . . . . .   3
    2.  IKEv2 Negotiation . . . . . . . . . . . . . . . . . . . . . .   3
-     2.1.  USE_BEET_MODE Notify Message Payload  . . . . . . . . . .   3
-   3.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   4
-   4.  Security Considerations . . . . . . . . . . . . . . . . . . .   4
-   5.  Implementation Status . . . . . . . . . . . . . . . . . . . .   4
-     5.1.  Linux XFRM  . . . . . . . . . . . . . . . . . . . . . . .   5
-     5.2.  strongSwan  . . . . . . . . . . . . . . . . . . . . . . .   5
-     5.3.  iproute2  . . . . . . . . . . . . . . . . . . . . . . . .   6
-   6.  Acknowledgment  . . . . . . . . . . . . . . . . . . . . . . .   6
-   7.  Normative References  . . . . . . . . . . . . . . . . . . . .   6
-   8.  Informative References  . . . . . . . . . . . . . . . . . . .   7
-   Appendix A.  Additional Stuff . . . . . . . . . . . . . . . . . .   8
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
+     2.1.  Traffic Selectors . . . . . . . . . . . . . . . . . . . .   4
+     2.2.  USE_BEET_MODE Notify Message Payload  . . . . . . . . . .   5
+   3.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
+   4.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
+   5.  Implementation Status . . . . . . . . . . . . . . . . . . . .   6
+     5.1.  Linux XFRM  . . . . . . . . . . . . . . . . . . . . . . .   7
+     5.2.  strongSwan  . . . . . . . . . . . . . . . . . . . . . . .   7
+     5.3.  iproute2  . . . . . . . . . . . . . . . . . . . . . . . .   8
+   6.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .   8
+   7.  Normative References  . . . . . . . . . . . . . . . . . . . .   8
+   8.  Informative References  . . . . . . . . . . . . . . . . . . .   9
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
 
 1.  Introduction
 
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Antony & Klassert       Expires 30 November 2026                [Page 2]
+Antony & Klassert       Expires 13 December 2026                [Page 2]
 
-Internet-Draft           IKv2 for BEET mode ESP                 May 2026
+Internet-Draft           IKEv2 for BEET mode ESP               June 2026
 
 
 1.1.  Background
@@ -132,15 +132,17 @@ Internet-Draft           IKv2 for BEET mode ESP                 May 2026
 1.2.  Requirements Language
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-   document are to be interpreted as described in [RFC2119].
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
 
 2.  IKEv2 Negotiation
 
-   When negotiating a Child SA using IKEv2, the initiator MUST use the
-   new "USE_BEET_MODE" Notify Message Status Type to request a Child SA
-   pair with BEET mode support.  The method used is similar to how
-   USE_TRANSPORT_MODE is negotiated, as described in [RFC7296]
+   When negotiating a Child SA using IKEv2, the new "USE_BEET_MODE"
+   Notify Message Status Type is used to negotiate BEET mode for the
+   Child SA pair.  The method used is similar to how USE_TRANSPORT_MODE
+   is negotiated, as described in [RFC7296]
 
    To request a BEET-mode SA on the Child SA pair, the initiator MUST
    include the USE_BEET_MODE, Notify Message Status Type, when
@@ -148,40 +150,109 @@ Internet-Draft           IKv2 for BEET mode ESP                 May 2026
    CREATE_CHILD_SA exchanges to create a new Child SA.  If the request
    is accepted, the response MUST also include a USE_BEET_MODE
    Notification Message Status Type.  If the responder declines and does
-   not include the USE_BEET_MODE notification in the response, the child
-   SA may be established without BEET mode enabled.  If this is
-   unacceptable to the initiator, the initiator MUST delete the child
-   SA.
-
-   As the use of the USE_BEET_MODE mode payload is currently only
-   defined for non-transport-mode tunnels, the USE_BEET_MODE
-   notification MUST NOT be combined with the USE_TRANSPORT
-   notification.
-
-2.1.  USE_BEET_MODE Notify Message Payload
+   not include the USE_BEET_MODE notification in the response, the Child
+   SA will be established in Tunnel mode.  If Tunnel mode is
+   unacceptable to the initiator, the initiator MUST delete the Child SA
+   via a subsequent INFORMATIONAL exchange with a Delete payload, as
+   specified in [RFC7296].
 
 
 
 
 
 
-Antony & Klassert       Expires 30 November 2026                [Page 3]
+
+
+
+
+Antony & Klassert       Expires 13 December 2026                [Page 3]
 
-Internet-Draft           IKv2 for BEET mode ESP                 May 2026
+Internet-Draft           IKEv2 for BEET mode ESP               June 2026
 
 
-   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-   +-+-----------------------------+-------------------------------+
-   ! Next Payload  !C!  RESERVED   !         Payload Length        !
-   +---------------+---------------+-------------------------------+
-   !  Protocol ID  !   SPI Size    !      Notify Message Type      !
-   +---------------+---------------+-------------------------------+
+   A responder for which Tunnel mode is not an acceptable fallback for
+   this Child SA MAY, during a CREATE_CHILD_SA exchange, instead reject
+   the request by returning a NO_PROPOSAL_CHOSEN notification, in which
+   case no Child SA is created.  During the IKE_AUTH exchange, the
+   responder MUST instead follow the Tunnel-mode fallback described
+   above, since rejecting the Child SA via NO_PROPOSAL_CHOSEN would
+   leave the IKE SA established without any Child SA.
 
-   *  Payload Length - MUST be 0.
+   When rekeying a Child SA that was established with BEET mode, the
+   USE_BEET_MODE notification MUST NOT be included in the
+   CREATE_CHILD_SA exchange; the mode of the replacement Child SA is
+   inherited from the Child SA being replaced.
 
-   *  Protocol ID (1 octet) - MUST be 0.  MUST be ignored if not 0.
+   The USE_BEET_MODE notification MUST NOT be combined with other Child
+   SA mode notifications, such as USE_TRANSPORT_MODE or USE_AGGFRAG
+   [RFC9347], in the same request.  As BEET mode is currently specified
+   only in terms of Tunnel mode processing
+   [I-D.ipsecme-rfc7402-beet-update], its interaction with these other
+   modes is not defined.
 
-   *  SPI Size (1 octet) - MUST be 0.  MUST be ignored if not 0.
+   If a responder nonetheless receives a request containing the
+   USE_BEET_MODE notification together with one or more other Child SA
+   mode notifications, it MUST select at most one of these
+   notifications, or none of them -- in which case the Child SA is
+   established in Tunnel mode -- and include only that single
+   notification, if any, in its response.
+
+   If, contrary to the above, the response includes the USE_BEET_MODE
+   notification together with any other Child SA mode notification, the
+   response is ambiguous as to which mode the responder has selected;
+   the initiator MUST treat the response as invalid and MUST delete the
+   Child SA.  In either case -- whether the responder omitted
+   USE_BEET_MODE (resulting in Tunnel mode, as described above) or
+   returned such an ambiguous response -- the initiator can determine
+   acceptability immediately upon processing the response.  It MAY
+   therefore delete the Child SA without first installing it.
+
+2.1.  Traffic Selectors
+
+   A BEET mode Security Association binds the Child SA to a single,
+   fixed pair of inner addresses for its lifetime
+   [I-D.ipsecme-rfc7402-beet-update].  This is in contrast to Tunnel
+   mode, where the Traffic Selectors negotiate address ranges and the
+   inner addresses of any given packet may be any pair of addresses
+   within those ranges.  For this reason, the Traffic Selectors (TSi and
+   TSr) of a Child SA negotiated with the USE_BEET_MODE notification
+   MUST each specify a single IP address -- that is, a Starting Address
+   equal to the Ending Address (equivalent to a /32 or /128 prefix), as
+
+
+
+Antony & Klassert       Expires 13 December 2026                [Page 4]
+
+Internet-Draft           IKEv2 for BEET mode ESP               June 2026
+
+
+   defined in Section 3.13.1 of [RFC7296] -- which become the inner
+   addresses bound to the Child SA.
+
+   The initiator MAY propose TSi and TSr that already each specify a
+   single IP address, or MAY propose broader Traffic Selectors and rely
+   on the responder to narrow them, as described in Section 2.9 of
+   [RFC7296].  If the responder selects USE_BEET_MODE, the TSi and TSr
+   returned in its response MUST each specify a single IP address,
+   regardless of how the corresponding Traffic Selectors were proposed
+   in the request.  If the proposed Traffic Selectors cannot be narrowed
+   to a single address acceptable to the responder's policy, the
+   responder MUST NOT include the USE_BEET_MODE notification in its
+   response, resulting in Tunnel mode (or NO_PROPOSAL_CHOSEN, per the
+   responder's policy as described above).
+
+   The initiator MUST verify that, when the response includes the
+   USE_BEET_MODE notification, the TSi and TSr returned in the response
+   each specify a single IP address.  If they do not, the response is
+   invalid; as with an ambiguous USE_BEET_MODE response described above,
+   the initiator MUST delete the Child SA.
+
+2.2.  USE_BEET_MODE Notify Message Payload
+
+   The USE_BEET_MODE Notify Message Status Type uses the Notify Payload
+   format defined in Section 3.10 of [RFC7296].  The Protocol ID and SPI
+   Size fields MUST be set to 0 and MUST be ignored if not 0.  The
+   notification carries no Notification Data.
 
 3.  IANA Considerations
 
@@ -203,12 +274,29 @@ Internet-Draft           IKv2 for BEET mode ESP                 May 2026
    Since the BEET security associations have the semantics of a fixed,
    point-to-point tunnel between two IP addresses, it is possible to
    place one or both of the tunnel end points into other network or
+
+
+
+Antony & Klassert       Expires 13 December 2026                [Page 5]
+
+Internet-Draft           IKEv2 for BEET mode ESP               June 2026
+
+
    nodes but those that actually "possess" the inner IP addresses, i.e.,
    to implement a BEET mode proxy.  However, since such usage defeats
    the security benefits of combined ESP processing, as discussed in
    [I-D.nikander-esp-beet-mode], the implementations SHOULD NOT support
    such usage when used in combination with IKEv2; instead use IKEv2
    MOBIKE to move the between networks.
+
+   Falling back to Tunnel mode when USE_BEET_MODE is not negotiated is
+   functionally complete in most deployments, at the cost of the header-
+   compression and address-mapping optimizations BEET mode provides.  In
+   some use cases, however -- such as Host Identity Protocol (HIP)
+   deployments [RFC7401] that rely on these address mappings -- the
+   fallback may result in a loss of functionality beyond these
+   optimizations.  Whether such a loss is acceptable for a given
+   deployment is outside the scope of IKEv2 negotiation.
 
 5.  Implementation Status
 
@@ -218,14 +306,6 @@ Internet-Draft           IKv2 for BEET mode ESP                 May 2026
    This section records the status of known implementations of the
    protocol defined by this specification at the time of posting of this
    Internet-Draft, and is based on a proposal described in [RFC7942].
-
-
-
-Antony & Klassert       Expires 30 November 2026                [Page 4]
-
-Internet-Draft           IKv2 for BEET mode ESP                 May 2026
-
-
    The description of implementations in this section is intended to
    assist the IETF in its decision processes in progressing drafts to
    RFCs.  Please note that the listing of any individual implementation
@@ -246,6 +326,17 @@ Internet-Draft           IKv2 for BEET mode ESP                 May 2026
    Authors are requested to add a note to the RFC Editor at the top of
    this section, advising the Editor to remove the entire section before
    publication, as well as the reference to [RFC7942].
+
+
+
+
+
+
+
+Antony & Klassert       Expires 13 December 2026                [Page 6]
+
+Internet-Draft           IKEv2 for BEET mode ESP               June 2026
+
 
 5.1.  Linux XFRM
 
@@ -275,13 +366,6 @@ Internet-Draft           IKv2 for BEET mode ESP                 May 2026
    Name:  strongSwan https://docs.strongswan.org/docs/5.9/swanctl/
       swanctlConf.html
 
-
-
-Antony & Klassert       Expires 30 November 2026                [Page 5]
-
-Internet-Draft           IKv2 for BEET mode ESP                 May 2026
-
-
    Description:  Implements IKE negotiation and ESP support for BEET
       mode Linux
 
@@ -289,7 +373,8 @@ Internet-Draft           IKv2 for BEET mode ESP                 May 2026
 
    Coverage:  Implements negotiating BEET mode support in Child SA
       negotiations and using it in ESP.  The initial support was added
-      in 2006.
+      in 2006.  Does not support IPv4 fragments yet.  IPv6 fragments
+      appears to work.
 
    Licensing:  GPLv2
 
@@ -298,6 +383,16 @@ Internet-Draft           IKv2 for BEET mode ESP                 May 2026
       widely used.
 
    Contact  Tobias Brunner tobias@strongswan.org
+
+
+
+
+
+
+Antony & Klassert       Expires 13 December 2026                [Page 7]
+
+Internet-Draft           IKEv2 for BEET mode ESP               June 2026
+
 
 5.3.  iproute2
 
@@ -319,7 +414,7 @@ Internet-Draft           IKv2 for BEET mode ESP                 May 2026
    Contact:  https://lore.kernel.org/netdev/ or Stephen Hemminger
       stephen@networkplumber.org
 
-6.  Acknowledgment
+6.  Acknowledgments
 
    We extend our sincere gratitude to the authors and contributors who
    contributed to the standardization of BEET mode.  Their insights and
@@ -327,16 +422,6 @@ Internet-Draft           IKv2 for BEET mode ESP                 May 2026
    contributions to the implementation of BEET mode many years ago.
 
 7.  Normative References
-
-
-
-
-
-
-Antony & Klassert       Expires 30 November 2026                [Page 6]
-
-Internet-Draft           IKv2 for BEET mode ESP                 May 2026
-
 
    [I-D.ipsecme-rfc7402-beet-update]
               Moskowitz, R., Laari, P., Melen, J., Antony, A., and A.
@@ -356,6 +441,19 @@ Internet-Draft           IKv2 for BEET mode ESP                 May 2026
               (IKEv2)", STD 79, RFC 7296, DOI 10.17487/RFC7296, October
               2014, <https://www.rfc-editor.org/info/rfc7296>.
 
+
+
+
+
+Antony & Klassert       Expires 13 December 2026                [Page 8]
+
+Internet-Draft           IKEv2 for BEET mode ESP               June 2026
+
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
 8.  Informative References
 
    [I-D.nikander-esp-beet-mode]
@@ -369,6 +467,14 @@ Internet-Draft           IKv2 for BEET mode ESP                 May 2026
               Text on Security Considerations", BCP 72, RFC 3552,
               DOI 10.17487/RFC3552, July 2003,
               <https://www.rfc-editor.org/info/rfc3552>.
+
+   [RFC4301]  Kent, S. and K. Seo, "Security Architecture for the
+              Internet Protocol", RFC 4301, DOI 10.17487/RFC4301,
+              December 2005, <https://www.rfc-editor.org/info/rfc4301>.
+
+   [RFC4303]  Kent, S., "IP Encapsulating Security Payload (ESP)",
+              RFC 4303, DOI 10.17487/RFC4303, December 2005,
+              <https://www.rfc-editor.org/info/rfc4303>.
 
    [RFC6982]  Sheffer, Y. and A. Farrel, "Improving Awareness of Running
               Code: The Implementation Status Section", RFC 6982,
@@ -386,31 +492,34 @@ Internet-Draft           IKv2 for BEET mode ESP                 May 2026
               DOI 10.17487/RFC7402, April 2015,
               <https://www.rfc-editor.org/info/rfc7402>.
 
-
-
-
-Antony & Klassert       Expires 30 November 2026                [Page 7]
-
-Internet-Draft           IKv2 for BEET mode ESP                 May 2026
-
-
    [RFC7942]  Sheffer, Y. and A. Farrel, "Improving Awareness of Running
               Code: The Implementation Status Section", BCP 205,
               RFC 7942, DOI 10.17487/RFC7942, July 2016,
               <https://www.rfc-editor.org/info/rfc7942>.
 
+
+
+
+
+Antony & Klassert       Expires 13 December 2026                [Page 9]
+
+Internet-Draft           IKEv2 for BEET mode ESP               June 2026
+
+
    [RFC9333]  Migault, D. and T. Guggemos, "Minimal IP Encapsulating
               Security Payload (ESP)", RFC 9333, DOI 10.17487/RFC9333,
               January 2023, <https://www.rfc-editor.org/info/rfc9333>.
+
+   [RFC9347]  Hopps, C., "Aggregation and Fragmentation Mode for
+              Encapsulating Security Payload (ESP) and Its Use for IP
+              Traffic Flow Security (IP-TFS)", RFC 9347,
+              DOI 10.17487/RFC9347, January 2023,
+              <https://www.rfc-editor.org/info/rfc9347>.
 
    [STATUSNOTIFY]
               IANA, "IKEv2 Notify Message Status Types",
               <https://www.iana.org/assignments/ikev2-parameters/
               ikev2-parameters.xhtml#ikev2-parameters-16>.
-
-Appendix A.  Additional Stuff
-
-   This becomes an Appendix.
 
 Authors' Addresses
 
@@ -445,4 +554,7 @@ Authors' Addresses
 
 
 
-Antony & Klassert       Expires 30 November 2026                [Page 8]
+
+
+
+Antony & Klassert       Expires 13 December 2026               [Page 10]

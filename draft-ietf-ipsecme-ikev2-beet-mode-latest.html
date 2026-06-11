@@ -17,23 +17,24 @@ support, and multi-address multi-homing capabilities. The
 introduction of the USE_BEET_MODE Notify Message enables the
 negotiation and establishment of BEET mode security associations. 
     " name="description">
-<meta content="xml2rfc 3.33.0" name="generator">
+<meta content="xml2rfc 3.34.0" name="generator">
 <meta content="IKEv2" name="keyword">
 <meta content="BEET" name="keyword">
 <meta content="draft-ietf-ipsecme-ikev2-beet-mode-05" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.33.0
+  xml2rfc 3.34.0
     Python 3.12.3
     ConfigArgParse 1.7.5
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.2
     lxml 6.1.1
+    natsort 8.4.0
     platformdirs 4.9.6
     pycountry 26.2.16
     PyYAML 6.0.1
     requests 2.31.0
-    wcwidth 0.7.0
+    wcwidth 0.8.1
 -->
 <link href="draft-ietf-ipsecme-ikev2-beet-mode-05.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1223,12 +1224,12 @@ li > p:last-of-type:only-child {
 <table class="ears">
 <thead><tr>
 <td class="left">Internet-Draft</td>
-<td class="center">IKv2 for BEET mode ESP</td>
-<td class="right">May 2026</td>
+<td class="center">IKEv2 for BEET mode ESP</td>
+<td class="right">June 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Antony &amp; Klassert</td>
-<td class="center">Expires 30 November 2026</td>
+<td class="center">Expires 13 December 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1239,12 +1240,12 @@ li > p:last-of-type:only-child {
 <dd class="workgroup">IPSECME Working Group</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-05-29" class="published">29 May 2026</time>
+<time datetime="2026-06-11" class="published">11 June 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-11-30">30 November 2026</time></dd>
+<dd class="expires"><time datetime="2026-12-13">13 December 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1289,7 +1290,7 @@ negotiation and establishment of BEET mode security associations.<a href="#secti
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 30 November 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 13 December 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1333,7 +1334,10 @@ negotiation and establishment of BEET mode security associations.<a href="#secti
             <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-ikev2-negotiation" class="internal xref">IKEv2 Negotiation</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
-                <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-use_beet_mode-notify-messag" class="internal xref">USE_BEET_MODE Notify Message Payload</a></p>
+                <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-traffic-selectors" class="internal xref">Traffic Selectors</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2">
+                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-use_beet_mode-notify-messag" class="internal xref">USE_BEET_MODE Notify Message Payload</a></p>
 </li>
             </ul>
 </li>
@@ -1358,7 +1362,7 @@ negotiation and establishment of BEET mode security associations.<a href="#secti
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-acknowledgment" class="internal xref">Acknowledgment</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
@@ -1367,10 +1371,7 @@ negotiation and establishment of BEET mode security associations.<a href="#secti
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-additional-stuff" class="internal xref">Additional Stuff</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1384,8 +1385,8 @@ negotiation and establishment of BEET mode security associations.<a href="#secti
 <span>[<a href="#I-D.ipsecme-rfc7402-beet-update" class="cite xref">I-D.ipsecme-rfc7402-beet-update</a>]</span>. BEET mode was
 originally proposed in <span>[<a href="#I-D.nikander-esp-beet-mode" class="cite xref">I-D.nikander-esp-beet-mode</a>]</span> and first
 standardized in Appendix B of <span>[<a href="#RFC7402" class="cite xref">RFC7402</a>]</span>. It offers an optimized
-approach for deploying IP Security (IPsec) [RFC4301] using
-Encapsulating Security Payload (ESP) [RFC4303] for end-to-end use
+approach for deploying IP Security (IPsec) <span>[<a href="#RFC4301" class="cite xref">RFC4301</a>]</span> using
+Encapsulating Security Payload (ESP) <span>[<a href="#RFC4303" class="cite xref">RFC4303</a>]</span> for end-to-end use
 cases. It combines the advantages of Tunnel and Transport modes
 specified in <span>[<a href="#RFC7296" class="cite xref">RFC7296</a>]</span>, while minimizing their overhead for
 end-to-end use cases.<a href="#section-1-1" class="pilcrow">¶</a></p>
@@ -1414,59 +1415,103 @@ conserves energy, especially benefiting lower-powered devices.<a href="#section-
 <a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-requirements-language" class="section-name selfRef">Requirements Language</a>
         </h3>
 <p id="section-1.2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-document are to be interpreted as described in <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span>.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+"OPTIONAL" in this document are to be interpreted as described in
+BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they appear in
+all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
 </section>
 </section>
 <section id="section-2">
       <h2 id="name-ikev2-negotiation">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-ikev2-negotiation" class="section-name selfRef">IKEv2 Negotiation</a>
       </h2>
-<p id="section-2-1">When negotiating a Child SA using IKEv2, the initiator MUST use the
-new "USE_BEET_MODE" Notify Message Status Type to request a Child SA pair with
-BEET mode support. The method used is similar to how
-USE_TRANSPORT_MODE is negotiated, as described in <span>[<a href="#RFC7296" class="cite xref">RFC7296</a>]</span><a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-1">When negotiating a Child SA using IKEv2, the new "USE_BEET_MODE"
+Notify Message Status Type is used to negotiate BEET mode for the
+Child SA pair. The method used is similar to how USE_TRANSPORT_MODE is
+negotiated, as described in <span>[<a href="#RFC7296" class="cite xref">RFC7296</a>]</span><a href="#section-2-1" class="pilcrow">¶</a></p>
 <p id="section-2-2">To request a BEET-mode SA on the Child SA pair, the initiator MUST
 include the USE_BEET_MODE, Notify Message Status Type, when requesting
 a new Child SA, either during the IKE_AUTH or the CREATE_CHILD_SA
 exchanges to create a new Child SA. If the request is accepted, the
-response MUST also include a USE_BEET_MODE Notification Message Status Type.
-If the responder declines and does not include the USE_BEET_MODE notification
-in the response, the child SA may be established without BEET mode enabled.
-If this is unacceptable to the initiator, the initiator MUST delete the child
-SA.<a href="#section-2-2" class="pilcrow">¶</a></p>
-<p id="section-2-3">As the use of the USE_BEET_MODE mode payload is currently only defined
-for non-transport-mode tunnels, the USE_BEET_MODE notification MUST NOT
-be combined with the USE_TRANSPORT notification.<a href="#section-2-3" class="pilcrow">¶</a></p>
+response MUST also include a USE_BEET_MODE Notification Message Status
+Type. If the responder declines and does not include the USE_BEET_MODE
+notification in the response, the Child SA will be established in
+Tunnel mode. If Tunnel mode is unacceptable to the initiator, the
+initiator MUST delete the Child SA via a subsequent INFORMATIONAL
+exchange with a Delete payload, as specified in <span>[<a href="#RFC7296" class="cite xref">RFC7296</a>]</span>.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-3">A responder for which Tunnel mode is not an acceptable fallback for
+this Child SA MAY, during a CREATE_CHILD_SA exchange, instead reject
+the request by returning a NO_PROPOSAL_CHOSEN notification, in which
+case no Child SA is created. During the IKE_AUTH exchange, the
+responder MUST instead follow the Tunnel-mode fallback described
+above, since rejecting the Child SA via NO_PROPOSAL_CHOSEN would
+leave the IKE SA established without any Child SA.<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-4">When rekeying a Child SA that was established with BEET mode, the
+USE_BEET_MODE notification MUST NOT be included in the CREATE_CHILD_SA
+exchange; the mode of the replacement Child SA is inherited from the
+Child SA being replaced.<a href="#section-2-4" class="pilcrow">¶</a></p>
+<p id="section-2-5">The USE_BEET_MODE notification MUST NOT be combined with other Child
+SA mode notifications, such as USE_TRANSPORT_MODE or USE_AGGFRAG
+<span>[<a href="#RFC9347" class="cite xref">RFC9347</a>]</span>, in the same request. As BEET mode is currently specified
+only in terms of Tunnel mode processing
+<span>[<a href="#I-D.ipsecme-rfc7402-beet-update" class="cite xref">I-D.ipsecme-rfc7402-beet-update</a>]</span>, its interaction with these other
+modes is not defined.<a href="#section-2-5" class="pilcrow">¶</a></p>
+<p id="section-2-6">If a responder nonetheless receives a request containing the
+USE_BEET_MODE notification together with one or more other Child SA
+mode notifications, it MUST select at most one of these notifications,
+or none of them -- in which case the Child SA is established in Tunnel
+mode -- and include only that single notification, if any, in its
+response.<a href="#section-2-6" class="pilcrow">¶</a></p>
+<p id="section-2-7">If, contrary to the above, the response includes the USE_BEET_MODE
+notification together with any other Child SA mode notification, the
+response is ambiguous as to which mode the responder has selected;
+the initiator MUST treat the
+response as invalid and MUST delete the Child SA. In either case --
+whether the responder omitted USE_BEET_MODE (resulting in Tunnel
+mode, as described above) or returned such an ambiguous response --
+the initiator can determine acceptability immediately upon processing
+the response. It MAY therefore delete the Child SA without first
+installing it.<a href="#section-2-7" class="pilcrow">¶</a></p>
 <section id="section-2.1">
-        <h3 id="name-use_beet_mode-notify-messag">
-<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-use_beet_mode-notify-messag" class="section-name selfRef">USE_BEET_MODE Notify Message Payload</a>
+        <h3 id="name-traffic-selectors">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-traffic-selectors" class="section-name selfRef">Traffic Selectors</a>
         </h3>
-<div class="sourcecode" id="section-2.1-1">
-<pre>
-
-
-0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-----------------------------+-------------------------------+
-! Next Payload  !C!  RESERVED   !         Payload Length        !
-+---------------+---------------+-------------------------------+
-!  Protocol ID  !   SPI Size    !      Notify Message Type      !
-+---------------+---------------+-------------------------------+
-
-
-</pre><a href="#section-2.1-1" class="pilcrow">¶</a>
-</div>
-<ul class="normal">
-<li class="normal" id="section-2.1-2.1">
-            <p id="section-2.1-2.1.1">Payload Length - MUST be 0.<a href="#section-2.1-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-2.1-2.2">
-            <p id="section-2.1-2.2.1">Protocol ID (1 octet) - MUST be 0. MUST be ignored if not 0.<a href="#section-2.1-2.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-2.1-2.3">
-            <p id="section-2.1-2.3.1">SPI Size (1 octet) - MUST be 0. MUST be ignored if not 0.<a href="#section-2.1-2.3.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
+<p id="section-2.1-1">A BEET mode Security Association binds the Child SA to a single,
+fixed pair of inner addresses for its lifetime
+<span>[<a href="#I-D.ipsecme-rfc7402-beet-update" class="cite xref">I-D.ipsecme-rfc7402-beet-update</a>]</span>. This is in contrast to Tunnel
+mode, where the Traffic Selectors negotiate address ranges and the
+inner addresses of any given packet may be any pair of addresses
+within those ranges. For this reason, the Traffic Selectors (TSi and
+TSr) of a Child SA negotiated with the USE_BEET_MODE notification
+MUST each specify a single IP address -- that is, a Starting Address
+equal to the Ending Address (equivalent to a /32 or /128 prefix), as
+defined in Section 3.13.1 of <span>[<a href="#RFC7296" class="cite xref">RFC7296</a>]</span> -- which become the inner
+addresses bound to the Child SA.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.1-2">The initiator MAY propose TSi and TSr that already each specify a
+single IP address, or MAY propose broader Traffic Selectors and rely
+on the responder to narrow them, as described in Section 2.9 of
+<span>[<a href="#RFC7296" class="cite xref">RFC7296</a>]</span>. If the responder selects USE_BEET_MODE, the TSi and TSr
+returned in its response MUST each specify a single IP address,
+regardless of how the corresponding Traffic Selectors were proposed
+in the request. If the proposed Traffic Selectors cannot be narrowed
+to a single address acceptable to the responder's policy, the
+responder MUST NOT include the USE_BEET_MODE notification in its
+response, resulting in Tunnel mode (or NO_PROPOSAL_CHOSEN, per the
+responder's policy as described above).<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.1-3">The initiator MUST verify that, when the response includes the
+USE_BEET_MODE notification, the TSi and TSr returned in the response
+each specify a single IP address. If they do not, the response is
+invalid; as with an ambiguous USE_BEET_MODE response described above,
+the initiator MUST delete the Child SA.<a href="#section-2.1-3" class="pilcrow">¶</a></p>
+</section>
+<section id="section-2.2">
+        <h3 id="name-use_beet_mode-notify-messag">
+<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-use_beet_mode-notify-messag" class="section-name selfRef">USE_BEET_MODE Notify Message Payload</a>
+        </h3>
+<p id="section-2.2-1">The USE_BEET_MODE Notify Message Status Type uses the Notify Payload
+format defined in Section 3.10 of <span>[<a href="#RFC7296" class="cite xref">RFC7296</a>]</span>. The Protocol ID and SPI Size fields
+MUST be set to 0 and MUST be ignored if not 0. The notification
+carries no Notification Data.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
 </section>
 </section>
 <section id="section-3">
@@ -1504,6 +1549,14 @@ security benefits of combined ESP processing, as discussed in
 <span>[<a href="#I-D.nikander-esp-beet-mode" class="cite xref">I-D.nikander-esp-beet-mode</a>]</span>, the implementations SHOULD NOT
 support such usage when used in combination with IKEv2; instead use IKEv2
 MOBIKE to move the between networks.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4">Falling back to Tunnel mode when USE_BEET_MODE is not negotiated is
+functionally complete in most deployments, at the cost of the
+header-compression and address-mapping optimizations BEET mode
+provides. In some use cases, however -- such as Host Identity
+Protocol (HIP) deployments <span>[<a href="#RFC7401" class="cite xref">RFC7401</a>]</span> that rely on these address
+mappings -- the fallback may result in a loss of functionality
+beyond these optimizations. Whether such a loss is acceptable for a
+given deployment is outside the scope of IKEv2 negotiation.<a href="#section-4-4" class="pilcrow">¶</a></p>
 </section>
 <section id="section-5">
       <h2 id="name-implementation-status">
@@ -1607,7 +1660,8 @@ appears stable.<a href="#section-5.1-2.12.1" class="pilcrow">¶</a></p>
 <dt id="section-5.2-1.9">Coverage:</dt>
           <dd style="margin-left: 1.5em" id="section-5.2-1.10">
             <p id="section-5.2-1.10.1">Implements negotiating BEET mode support in Child SA negotiations and
-using it in ESP. The initial support was added in 2006.<a href="#section-5.2-1.10.1" class="pilcrow">¶</a></p>
+using it in ESP. The initial support was added in 2006.  Does not support IPv4
+fragments yet. IPv6 fragments appears to work.<a href="#section-5.2-1.10.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-5.2-1.11">Licensing:</dt>
@@ -1675,8 +1729,8 @@ stephen@networkplumber.org<a href="#section-5.3-1.14.1" class="pilcrow">¶</a></
 </section>
 </section>
 <section id="section-6">
-      <h2 id="name-acknowledgment">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-acknowledgment" class="section-name selfRef">Acknowledgment</a>
+      <h2 id="name-acknowledgments">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
 <p id="section-6-1">We extend our sincere gratitude to the authors and contributors who
 contributed to the standardization of BEET mode. Their insights and
@@ -1697,8 +1751,12 @@ contributions to the implementation of BEET mode many years ago.<a href="#sectio
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7296">[RFC7296]</dt>
-    <dd>
+      <dd>
 <span class="refAuthor">Kaufman, C.</span>, <span class="refAuthor">Hoffman, P.</span>, <span class="refAuthor">Nir, Y.</span>, <span class="refAuthor">Eronen, P.</span>, and <span class="refAuthor">T. Kivinen</span>, <span class="refTitle">"Internet Key Exchange Protocol Version 2 (IKEv2)"</span>, <span class="seriesInfo">STD 79</span>, <span class="seriesInfo">RFC 7296</span>, <span class="seriesInfo">DOI 10.17487/RFC7296</span>, <time datetime="2014-10" class="refDate">October 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7296">https://www.rfc-editor.org/info/rfc7296</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+    <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -1714,6 +1772,14 @@ contributions to the implementation of BEET mode many years ago.<a href="#sectio
 <dt id="RFC3552">[RFC3552]</dt>
       <dd>
 <span class="refAuthor">Rescorla, E.</span> and <span class="refAuthor">B. Korver</span>, <span class="refTitle">"Guidelines for Writing RFC Text on Security Considerations"</span>, <span class="seriesInfo">BCP 72</span>, <span class="seriesInfo">RFC 3552</span>, <span class="seriesInfo">DOI 10.17487/RFC3552</span>, <time datetime="2003-07" class="refDate">July 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3552">https://www.rfc-editor.org/info/rfc3552</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4301">[RFC4301]</dt>
+      <dd>
+<span class="refAuthor">Kent, S.</span> and <span class="refAuthor">K. Seo</span>, <span class="refTitle">"Security Architecture for the Internet Protocol"</span>, <span class="seriesInfo">RFC 4301</span>, <span class="seriesInfo">DOI 10.17487/RFC4301</span>, <time datetime="2005-12" class="refDate">December 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4301">https://www.rfc-editor.org/info/rfc4301</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4303">[RFC4303]</dt>
+      <dd>
+<span class="refAuthor">Kent, S.</span>, <span class="refTitle">"IP Encapsulating Security Payload (ESP)"</span>, <span class="seriesInfo">RFC 4303</span>, <span class="seriesInfo">DOI 10.17487/RFC4303</span>, <time datetime="2005-12" class="refDate">December 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4303">https://www.rfc-editor.org/info/rfc4303</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6982">[RFC6982]</dt>
       <dd>
@@ -1735,20 +1801,18 @@ contributions to the implementation of BEET mode many years ago.<a href="#sectio
       <dd>
 <span class="refAuthor">Migault, D.</span> and <span class="refAuthor">T. Guggemos</span>, <span class="refTitle">"Minimal IP Encapsulating Security Payload (ESP)"</span>, <span class="seriesInfo">RFC 9333</span>, <span class="seriesInfo">DOI 10.17487/RFC9333</span>, <time datetime="2023-01" class="refDate">January 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9333">https://www.rfc-editor.org/info/rfc9333</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC9347">[RFC9347]</dt>
+      <dd>
+<span class="refAuthor">Hopps, C.</span>, <span class="refTitle">"Aggregation and Fragmentation Mode for Encapsulating Security Payload (ESP) and Its Use for IP Traffic Flow Security (IP-TFS)"</span>, <span class="seriesInfo">RFC 9347</span>, <span class="seriesInfo">DOI 10.17487/RFC9347</span>, <time datetime="2023-01" class="refDate">January 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9347">https://www.rfc-editor.org/info/rfc9347</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="STATUSNOTIFY">[STATUSNOTIFY]</dt>
     <dd>
 <span class="refAuthor">IANA</span>, <span class="refTitle">"IKEv2 Notify Message Status Types"</span>, <span>&lt;<a href="https://www.iana.org/assignments/ikev2-parameters/ikev2-parameters.xhtml#ikev2-parameters-16">https://www.iana.org/assignments/ikev2-parameters/ikev2-parameters.xhtml#ikev2-parameters-16</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
-<section id="appendix-A">
-      <h2 id="name-additional-stuff">
-<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-additional-stuff" class="section-name selfRef">Additional Stuff</a>
-      </h2>
-<p id="appendix-A-1">This becomes an Appendix.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
-</section>
 <div id="authors-addresses">
-<section id="appendix-B">
+<section id="appendix-A">
       <h2 id="name-authors-addresses">
 <a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
