@@ -14,7 +14,7 @@
 #+RFC_CONSENSUS: true
 
 #+TITLE: IKEv2 negotiation for Bound End-to-End Tunnel (BEET) mode ESP
-#+RFC_SHORT_TITLE: IKv2 for BEET mode ESP
+#+RFC_SHORT_TITLE: IKEv2 for BEET mode ESP
 #+AUTHOR: Antony Antony
 #+EMAIL: antony.antony@secunet.com
 #+AFFILIATION: secunet Security Networks AG
@@ -42,8 +42,8 @@ The Bound End-to-End Tunnel (BEET) mode is specified in
 [[I-D.ipsecme-rfc7402-beet-update]]. BEET mode was
 originally proposed in [[I-D.nikander-esp-beet-mode]] and first
 standardized in Appendix B of [[RFC7402]]. It offers an optimized
-approach for deploying IP Security (IPsec) [RFC4301] using
-Encapsulating Security Payload (ESP) [RFC4303] for end-to-end use
+approach for deploying IP Security (IPsec) [[RFC4301]] using
+Encapsulating Security Payload (ESP) [[RFC4303]] for end-to-end use
 cases. It combines the advantages of Tunnel and Transport modes
 specified in [[RFC7296]], while minimizing their overhead for
 end-to-end use cases.
@@ -73,50 +73,108 @@ conserves energy, especially benefiting lower-powered devices.
 ** Requirements Language
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-document are to be interpreted as described in [[RFC2119]].
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+"OPTIONAL" in this document are to be interpreted as described in
+BCP 14 [[RFC2119]] [[RFC8174]] when, and only when, they appear in
+all capitals, as shown here.
 
 
 * IKEv2 Negotiation
 
-When negotiating a Child SA using IKEv2, the initiator MUST use the
-new "USE_BEET_MODE" Notify Message Status Type to request a Child SA pair with
-BEET mode support. The method used is similar to how
-USE_TRANSPORT_MODE is negotiated, as described in [[RFC7296]]
+When negotiating a Child SA using IKEv2, the new "USE_BEET_MODE"
+Notify Message Status Type is used to negotiate BEET mode for the
+Child SA pair. The method used is similar to how USE_TRANSPORT_MODE is
+negotiated, as described in [[RFC7296]]
 
 To request a BEET-mode SA on the Child SA pair, the initiator MUST
 include the USE_BEET_MODE, Notify Message Status Type, when requesting
 a new Child SA, either during the IKE_AUTH or the CREATE_CHILD_SA
 exchanges to create a new Child SA. If the request is accepted, the
-response MUST also include a USE_BEET_MODE Notification Message Status Type.
-If the responder declines and does not include the USE_BEET_MODE notification
-in the response, the child SA may be established without BEET mode enabled.
-If this is unacceptable to the initiator, the initiator MUST delete the child
-SA.
+response MUST also include a USE_BEET_MODE Notification Message Status
+Type. If the responder declines and does not include the USE_BEET_MODE
+notification in the response, the Child SA will be established in
+Tunnel mode. If Tunnel mode is unacceptable to the initiator, the
+initiator MUST delete the Child SA via a subsequent INFORMATIONAL
+exchange with a Delete payload, as specified in [[RFC7296]].
 
-As the use of the USE_BEET_MODE mode payload is currently only defined
-for non-transport-mode tunnels, the USE_BEET_MODE notification MUST NOT
-be combined with the USE_TRANSPORT notification.
+A responder for which Tunnel mode is not an acceptable fallback for
+this Child SA MAY, during a CREATE_CHILD_SA exchange, instead reject
+the request by returning a NO_PROPOSAL_CHOSEN notification, in which
+case no Child SA is created. During the IKE_AUTH exchange, the
+responder MUST instead follow the Tunnel-mode fallback described
+above, since rejecting the Child SA via NO_PROPOSAL_CHOSEN would
+leave the IKE SA established without any Child SA.
+
+When rekeying a Child SA that was established with BEET mode, the
+USE_BEET_MODE notification MUST NOT be included in the CREATE_CHILD_SA
+exchange; the mode of the replacement Child SA is inherited from the
+Child SA being replaced.
+
+The USE_BEET_MODE notification MUST NOT be combined with other Child
+SA mode notifications, such as USE_TRANSPORT_MODE or USE_AGGFRAG
+[[RFC9347]], in the same request. As BEET mode is currently specified
+only in terms of Tunnel mode processing
+[[I-D.ipsecme-rfc7402-beet-update]], its interaction with these other
+modes is not defined.
+
+If a responder nonetheless receives a request containing the
+USE_BEET_MODE notification together with one or more other Child SA
+mode notifications, it MUST select at most one of these notifications,
+or none of them -- in which case the Child SA is established in Tunnel
+mode -- and include only that single notification, if any, in its
+response.
+
+If, contrary to the above, the response includes the USE_BEET_MODE
+notification together with any other Child SA mode notification, the
+response is ambiguous as to which mode the responder has selected;
+the initiator MUST treat the
+response as invalid and MUST delete the Child SA. In either case --
+whether the responder omitted USE_BEET_MODE (resulting in Tunnel
+mode, as described above) or returned such an ambiguous response --
+the initiator can determine acceptability immediately upon processing
+the response. It MAY therefore delete the Child SA without first
+installing it.
+
+
+** Traffic Selectors
+
+A BEET mode Security Association binds the Child SA to a single,
+fixed pair of inner addresses for its lifetime
+[[I-D.ipsecme-rfc7402-beet-update]]. This is in contrast to Tunnel
+mode, where the Traffic Selectors negotiate address ranges and the
+inner addresses of any given packet may be any pair of addresses
+within those ranges. For this reason, the Traffic Selectors (TSi and
+TSr) of a Child SA negotiated with the USE_BEET_MODE notification
+MUST each specify a single IP address -- that is, a Starting Address
+equal to the Ending Address (equivalent to a /32 or /128 prefix), as
+defined in Section 3.13.1 of [[RFC7296]] -- which become the inner
+addresses bound to the Child SA.
+
+The initiator MAY propose TSi and TSr that already each specify a
+single IP address, or MAY propose broader Traffic Selectors and rely
+on the responder to narrow them, as described in Section 2.9 of
+[[RFC7296]]. If the responder selects USE_BEET_MODE, the TSi and TSr
+returned in its response MUST each specify a single IP address,
+regardless of how the corresponding Traffic Selectors were proposed
+in the request. If the proposed Traffic Selectors cannot be narrowed
+to a single address acceptable to the responder's policy, the
+responder MUST NOT include the USE_BEET_MODE notification in its
+response, resulting in Tunnel mode (or NO_PROPOSAL_CHOSEN, per the
+responder's policy as described above).
+
+The initiator MUST verify that, when the response includes the
+USE_BEET_MODE notification, the TSi and TSr returned in the response
+each specify a single IP address. If they do not, the response is
+invalid; as with an ambiguous USE_BEET_MODE response described above,
+the initiator MUST delete the Child SA.
 
 
 ** USE_BEET_MODE Notify Message Payload
 
-#+begin_src
-
-
-0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-----------------------------+-------------------------------+
-! Next Payload  !C!  RESERVED   !         Payload Length        !
-+---------------+---------------+-------------------------------+
-!  Protocol ID  !   SPI Size    !      Notify Message Type      !
-+---------------+---------------+-------------------------------+
-
-
-#+end_src
-
-- Payload Length - MUST be 0.
-- Protocol ID (1 octet) - MUST be 0. MUST be ignored if not 0.
-- SPI Size (1 octet) - MUST be 0. MUST be ignored if not 0.
+The USE_BEET_MODE Notify Message Status Type uses the Notify Payload
+format defined in Section 3.10 of [[RFC7296]]. The Protocol ID and SPI Size fields
+MUST be set to 0 and MUST be ignored if not 0. The notification
+carries no Notification Data.
 
 
 * IANA Considerations
@@ -153,6 +211,15 @@ security benefits of combined ESP processing, as discussed in
 [[I-D.nikander-esp-beet-mode]], the implementations SHOULD NOT
 support such usage when used in combination with IKEv2; instead use IKEv2
 MOBIKE to move the between networks.
+
+Falling back to Tunnel mode when USE_BEET_MODE is not negotiated is
+functionally complete in most deployments, at the cost of the
+header-compression and address-mapping optimizations BEET mode
+provides. In some use cases, however -- such as Host Identity
+Protocol (HIP) deployments [[RFC7401]] that rely on these address
+mappings -- the fallback may result in a loss of functionality
+beyond these optimizations. Whether such a loss is acceptable for a
+given deployment is outside the scope of IKEv2 negotiation.
 
 
 * Implementation Status
@@ -211,7 +278,8 @@ Linux
 - Description: :: Implements IKE negotiation and ESP support for BEET mode Linux
 - Level of maturity: :: Stable for a long time
 - Coverage: :: Implements negotiating BEET mode support in Child SA negotiations and
-  using it in ESP. The initial support was added in 2006.
+  using it in ESP. The initial support was added in 2006.  Does not support IPv4
+  fragments yet. IPv6 fragments appears to work.
 - Licensing: :: GPLv2
 - Implementation experience :: strongSwan use a private Notify Message Status Type USE_BEET_MODE
   (40961) for IKE. As far we know BEET is widely used.
@@ -233,7 +301,7 @@ Linux
   stephen@networkplumber.org
 
 
-* Acknowledgment
+* Acknowledgments
 
 We extend our sincere gratitude to the authors and contributors who
 contributed to the standardization of BEET mode. Their insights and
@@ -244,6 +312,7 @@ contributions to the implementation of BEET mode many years ago.
 * Normative References
 
 ** RFC2119
+** RFC8174
 ** RFC7296
 ** I-D.ipsecme-rfc7402-beet-update
 
@@ -255,6 +324,9 @@ contributions to the implementation of BEET mode many years ago.
 ** RFC7942
 ** RFC7401
 ** RFC9333
+** RFC9347
+** RFC4301
+** RFC4303
 ** I-D.nikander-esp-beet-mode
 
 ** STATUSNOTIFY
@@ -263,9 +335,4 @@ contributions to the implementation of BEET mode many years ago.
 :REF_TITLE: IKEv2 Notify Message Status Types
 :REF_ORG: IANA
 :END:
-
-* Additional Stuff
-
-This becomes an Appendix.
-
 
